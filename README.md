@@ -184,7 +184,7 @@ src/main/resources/static/
 ## Reports
 - Lab 1 report: https://docs.google.com/document/d/14tZhnIS2NrNmMGgE8UW-rLMirMoAPfPxxQ8QosYh5Gs/edit?usp=sharing
 - Lab 2 report: https://docs.google.com/document/d/1w-UNgUYhvRam3E4iOgJxwrIdy_nXfXY52g8zrtHz--M/edit?usp=sharing
-- Lab 3 report: https://docs.google.com/document/d/1w-UNgUYhvRam3E4iOgJxwrIdy_nXfXY52g8zrtHz--M/edit?usp=sharing
+- Lab 3 report: https://docs.google.com/document/d/12uotM5Jty96gb6N3lU3k18zxiGzE5XY_W--obg0bKf0/edit?usp=sharing
 
 ## 🧑‍💻 Contributors
 
