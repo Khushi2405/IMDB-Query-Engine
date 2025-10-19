@@ -1,16 +1,12 @@
 package com.database.finalproject.model.page;
 
-import com.database.finalproject.model.page.DataPage;
 import com.database.finalproject.model.record.MovieRecord;
-import com.database.finalproject.model.record.ParentRecord;
-
 import java.util.Arrays;
-
 import static com.database.finalproject.constants.PageConstants.*;
 
 public class MovieDataPage extends DataPage<MovieRecord> {
 
-//    private final byte[] rows;
+
     private byte[] pageArray = new byte[PAGE_SIZE];
     private final int pageId;
 

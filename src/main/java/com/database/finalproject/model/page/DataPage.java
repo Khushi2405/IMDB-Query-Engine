@@ -1,7 +1,5 @@
 package com.database.finalproject.model.page;
 
-import com.database.finalproject.model.page.Page;
-import com.database.finalproject.model.record.MovieRecord;
 import com.database.finalproject.model.record.ParentRecord;
 
 public abstract class DataPage<T extends ParentRecord> implements Page {

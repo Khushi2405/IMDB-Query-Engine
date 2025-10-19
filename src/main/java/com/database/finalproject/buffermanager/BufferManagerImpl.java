@@ -32,7 +32,7 @@ public class BufferManagerImpl extends BufferManager {
     RandomAccessFile workedOnDataRaf;
     RandomAccessFile moviePersonDataRaf;
     RandomAccessFile movieIdIndexRaf;
-    RandomAccessFile movieTitleRaf;
+    RandomAccessFile movieTitleIndexRaf;
     int movieWorksOnBlockPageCount;
     int movieWorksOnPeopleBlockPageCount;
     AtomicInteger ioCounter;
@@ -49,41 +49,41 @@ public class BufferManagerImpl extends BufferManager {
         this.ioCounter = new AtomicInteger();
 
         try {
-            movieDataRaf = new RandomAccessFile(catalog.getCatalog(MOVIES_DATA_PAGE_INDEX).get("filename"), "rw");
+            movieDataRaf = new RandomAccessFile(catalog.getCatalog(MOVIES_DATA_PAGE_INDEX).get(DATABASE_CATALOGUE_KEY_FILENAME), "rw");
 //            System.out.println(dataRaf.length()/PAGE_SIZE);
         } catch (IOException e) {
             System.out.println("Error in RAF, file cannot be created");
             throw new RuntimeException(e);
         }
         try {
-            peopleDataRaf = new RandomAccessFile(catalog.getCatalog(PEOPLE_DATA_PAGE_INDEX).get("filename"), "rw");
+            peopleDataRaf = new RandomAccessFile(catalog.getCatalog(PEOPLE_DATA_PAGE_INDEX).get(DATABASE_CATALOGUE_KEY_FILENAME), "rw");
 //            System.out.println(dataRaf.length()/PAGE_SIZE);
         } catch (IOException e) {
             System.out.println("Error in RAF, file cannot be created");
             throw new RuntimeException(e);
         }
         try {
-            moviePersonDataRaf = new RandomAccessFile(catalog.getCatalog(MOVIE_PERSON_DATA_PAGE_INDEX).get("filename"), "rw");
+            moviePersonDataRaf = new RandomAccessFile(catalog.getCatalog(MOVIE_PERSON_DATA_PAGE_INDEX).get(DATABASE_CATALOGUE_KEY_FILENAME), "rw");
 //            System.out.println(dataRaf.length()/PAGE_SIZE);
         } catch (IOException e) {
             System.out.println("Error in RAF, file cannot be created");
             throw new RuntimeException(e);
         }
         try {
-            workedOnDataRaf = new RandomAccessFile(catalog.getCatalog(WORKED_ON_DATA_PAGE_INDEX).get("filename"), "rw");
+            workedOnDataRaf = new RandomAccessFile(catalog.getCatalog(WORKED_ON_DATA_PAGE_INDEX).get(DATABASE_CATALOGUE_KEY_FILENAME), "rw");
 //            System.out.println(dataRaf.length()/PAGE_SIZE);
         } catch (IOException e) {
             System.out.println("Error in RAF, file cannot be created");
             throw new RuntimeException(e);
         }
         try {
-            movieIdIndexRaf = new RandomAccessFile(catalog.getCatalog(MOVIE_ID_INDEX_PAGE_INDEX).get("filename"), "rw");
+            movieIdIndexRaf = new RandomAccessFile(catalog.getCatalog(MOVIE_ID_INDEX_PAGE_INDEX).get(DATABASE_CATALOGUE_KEY_FILENAME), "rw");
         } catch (IOException e) {
             System.out.println("Error in RAF, file cannot be created");
             throw new RuntimeException(e);
         }
         try {
-            movieTitleRaf = new RandomAccessFile(catalog.getCatalog(MOVIE_TITLE_INDEX_INDEX).get("filename"), "rw");
+            movieTitleIndexRaf = new RandomAccessFile(catalog.getCatalog(MOVIE_TITLE_INDEX_INDEX).get(DATABASE_CATALOGUE_KEY_FILENAME), "rw");
         } catch (IOException e) {
             System.out.println("Error in RAF, file cannot be created");
             throw new RuntimeException(e);
@@ -116,7 +116,7 @@ public class BufferManagerImpl extends BufferManager {
 
                 // if page is null then page with the page id not found return null
                 if (page == null) {
-                    logger.error("Page not found: {}", pageId);
+//                    logger.error("Page not found: {}", pageId);
                     return null;
                 }
                 DLLNode currNode = new DLLNode(page, catalogIndex);
@@ -188,7 +188,7 @@ public class BufferManagerImpl extends BufferManager {
             pageHash.get(pair).isDirty = true;
             return;
         }
-        logger.error("Page not found: {}", pageId);
+//        logger.error("Page not found: {}", pageId);
     }
 
     @Override
@@ -200,7 +200,7 @@ public class BufferManagerImpl extends BufferManager {
             pageHash.get(pair).pinCount--;
             return;
         }
-        logger.error("Page not found: {}", pageId);
+//        logger.error("Page not found: {}", pageId);
     }
 
     @Override
@@ -215,7 +215,7 @@ public class BufferManagerImpl extends BufferManager {
         else if (catalogIndex == WORKED_ON_DATA_PAGE_INDEX) raf = workedOnDataRaf;
         else if (catalogIndex == MOVIE_PERSON_DATA_PAGE_INDEX) raf = moviePersonDataRaf;
         else if (catalogIndex == MOVIE_ID_INDEX_PAGE_INDEX) raf = movieIdIndexRaf;
-        else if (catalogIndex == MOVIE_TITLE_INDEX_INDEX)raf = movieTitleRaf;
+        else if (catalogIndex == MOVIE_TITLE_INDEX_INDEX)raf = movieTitleIndexRaf;
         else{
             logger.error("Invalid index");
             return;
@@ -325,7 +325,7 @@ public class BufferManagerImpl extends BufferManager {
         else if (catalogIndex == MOVIE_ID_INDEX_PAGE_INDEX)
             raf = movieIdIndexRaf;
         else if (catalogIndex == MOVIE_TITLE_INDEX_INDEX)
-            raf = movieTitleRaf;
+            raf = movieTitleIndexRaf;
         else{
             logger.error("Invalid index");
             return null;

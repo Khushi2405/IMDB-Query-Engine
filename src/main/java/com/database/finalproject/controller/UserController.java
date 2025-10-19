@@ -45,6 +45,8 @@ public class UserController {
     public UserController(int bufferSize) {
         this.bf = new BufferManagerImpl(bufferSize);
         this.bufferSize = bufferSize;
+        this.movieIdBtree = new BTreeImpl(bf, MOVIE_ID_INDEX_PAGE_INDEX);
+        this.movieTitleBtree = new BTreeImpl(bf, MOVIE_TITLE_INDEX_INDEX);
 //        Utilities.loadMoviesDataset(bf, MOVIE_DATABASE_FILE);
 //        Utilities.loadWorkedOnDataset(bf, WORKED_ON_DATABASE_FILE);
 //        Utilities.loadPeopleDataset(bf, PEOPLE_DATABASE_FILE);
@@ -107,17 +109,18 @@ public class UserController {
 
     private List<MovieRecord> fetchRows(Iterator<Rid> res) {
         List<MovieRecord> ans = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         while (res.hasNext()) {
             Rid r = res.next();
             int pageId = r.getPageId();
             int slotId = r.getSlotId();
-            MovieDataPage page = (MovieDataPage) bf.getPage(pageId);
+            MovieDataPage page = (MovieDataPage) bf.getPage(pageId, 0);
             MovieRecord movieRecord = page.getRecord(slotId);
             ans.add(movieRecord);
+            list.add(movieRecord.getFieldByIndex(0) + " , " + movieRecord.getFieldByIndex(1));
             bf.unpinPage(pageId);
-
-
         }
+        printResults(list);
         return ans;
     }
 
@@ -192,9 +195,11 @@ public class UserController {
 		headerRow.createCell(1).setCellValue("Name");
 
 		TitleNameRecord output;
+        List<String> list = new ArrayList<>();
 		while ((output = finalProjection.next()) != null) {
 			String title = new String(removeTrailingBytes(output.title())).trim();
 			String name = new String(removeTrailingBytes(output.name())).trim();
+            list.add(new String(title + " , " + name));
 
 			// Print to console uncomment if want to print on command line
 //			System.out.println(title + "," + name);
@@ -215,18 +220,27 @@ public class UserController {
 			throw new RuntimeException(e);
 		}
 
-        System.out.println("Total records in Movies Table : " + movieScan.getTotalRecords());
-        System.out.println("Total records in Worked On Table : " + workedOnScan.getTotalRecords());
-        System.out.println("Total records in People Table : " + peopleScan.getTotalRecords());
-        System.out.println("Total records matched with Worked On Table : " + workedOnSelection.getTotalMatched());
-        System.out.println("Total records matched with Movies Table : " + movieSelection.getTotalMatched());
-        System.out.println("Actual total I/Os : " + bf.getIoCounter());
-
-
-		System.out.println("Query completed. Results saved to src/main/resources/static/query_output_"+ startRange + "_" + endRange + ".xlsx");
+//        System.out.println("Total records in Movies Table : " + movieScan.getTotalRecords());
+//        System.out.println("Total records in Worked On Table : " + workedOnScan.getTotalRecords());
+//        System.out.println("Total records in People Table : " + peopleScan.getTotalRecords());
+//        System.out.println("Total records matched with Worked On Table : " + workedOnSelection.getTotalMatched());
+//        System.out.println("Total records matched with Movies Table : " + movieSelection.getTotalMatched());
+//        System.out.println("Actual total I/Os : " + bf.getIoCounter());
+//
+//
+//		System.out.println("Query completed. Results saved to src/main/resources/static/query_output_"+ startRange + "_" + endRange + ".xlsx");
         Map<String, Object> result = new HashMap<>();
         result.put("iocount", bf.getIoCounter());
         result.put("movieSelection", movieSelection.getTotalMatched());
+        printResults(list);
         return result;
+    }
+
+    private void printResults(List<String> list) {
+        for(String s : list){
+            System.out.println(s);
+        }
+
+        System.out.println("\n\n\nTotal Records - " + list.size());
     }
 }

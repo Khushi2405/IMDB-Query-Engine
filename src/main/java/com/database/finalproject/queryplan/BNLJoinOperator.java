@@ -58,10 +58,6 @@ public class BNLJoinOperator<L extends ParentRecord, R extends ParentRecord, O e
                     return null; // All data processed
                 }
                 continue;
-//                currentRightRecord = rightChild.next();
-//                if (currentRightRecord == null) {
-//                    return null; // No more right-side data
-//                }
             }
 
             String key = currentRightRecord.getFieldByIndex(joinAttrRight);
@@ -79,10 +75,9 @@ public class BNLJoinOperator<L extends ParentRecord, R extends ParentRecord, O e
 
     private boolean loadNextLeftBlock() {
         hashTable.clear();
-        // TODO: close or reset scan???
         rightChild.close();
         rightChild.open();
-//        System.out.println("LoadBlock called for " + joinResultType);
+
         unpinLeftBlock();
         int pagesLoaded = 0;
         boolean endOfFile = false;
